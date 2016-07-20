@@ -4,11 +4,18 @@ import csv
 import sklearn
 
 #Keyword categories
-STRONGKEYS = ["Financ", "financ", "alpha", "Alpha", "trader", "Trader", "trading", "Trading", "stock", "Stock", "equity",
-              "Equity", "Advis", "advis", "RIA", "Hedge", "hedge","Fund", "fund", "Wealth", "wealth", "AIM", "Portfolio",
-              "portfolio", "CFP", "Trade", "trade", "invest", "Invest", "Asset", "asset"]
-MEDIUMKEYS = ["capital", "Capital", "OTC", "executive", "Executive", "CEO", "Analyst", "analyst", "fintech", "Fintech"]
-WEAKKEYS = ["Board", "board", "manage", "Manage", "Option", "option", "retail", "Retail", "swing", "Swing", "chief", "Chief"]
+STRONGKEYS = ["Financ", "Alpha", "Trader", "Trading", "Stock", "equity", "Advis", "RIA", "hedge","Fund", "Wealth","Portfolio",
+              "portfolio", "CFP", "Trade", "Invest", "Asset", ]
+MEDIUMKEYS = ["capital", "OTC", "executive", "CEO", "Analyst", "Fintech"]
+WEAKKEYS = ["Board", "Manage", "Option", "Retail", "swing", "Chief"]
+
+ALLKEYS = STRONGKEYS + MEDIUMKEYS + WEAKKEYS
+
+KEYDICT = dict()
+for key in ALLKEYS:
+    real = key.lower()
+    KEYDICT[real] = 0
+
 
 FILENAME = "BLAHBLAHBLAH.csv"
 
@@ -34,6 +41,7 @@ def findstrong(string):
     for word in STRONGKEYS:
         result = re.findall(word,string)
         count += len(result)
+        KEYDICT[word] += len(result)
     return count
 
 def findmedium(string):
@@ -41,6 +49,7 @@ def findmedium(string):
     for word in MEDIUMKEYS:
         result = re.findall(word,string)
         count += len(result)
+        KEYDICT[word] += len(result)
     return count
 
 def findweak(string):
@@ -48,6 +57,7 @@ def findweak(string):
     for word in WEAKKEYS:
         result = re.findall(word,string)
         count += len(result)
+        KEYDICT[word] += len(result)
     return count
 
 def read_CSV(filename):
@@ -63,12 +73,12 @@ def data_clean(table):
     data = []
     for line in range(len(table)):
         current_row = []
-        current_row.append(findstrong(line[HANDLE]))
-        current_row.append(findmedium(line[HANDLE]))
-        current_row.append(findweak(line[HANDLE]))
-        current_row.append(findstrong(line[BIO]))
-        current_row.append(findmedium(line[BIO]))
-        current_row.append(findweak(line[BIO]))
+        current_row.append(findstrong((line[HANDLE]).lower()))
+        current_row.append(findmedium(line[HANDLE].lower()))
+        current_row.append(findweak(line[HANDLE].lower()))
+        current_row.append(findstrong(line[BIO].lower()))
+        current_row.append(findmedium(line[BIO].lower()))
+        current_row.append(findweak(line[BIO].lower()))
         current_row.append(data[FOLLOWER_COUNT])
         current_row.append(data[FRIEND_COUNT])
         current_row.append(data[INVESTOR])
@@ -104,3 +114,4 @@ if __name__ == '__main__':
     table = read_CSV(FILENAME)
     x_train, y_train, x_test, y_test = data_clean(table)
     test_algorithms(x_train, y_train, x_test, y_test)
+    print(KEYDICT)
