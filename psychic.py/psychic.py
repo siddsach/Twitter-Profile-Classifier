@@ -30,22 +30,25 @@ FOLLOWERS = 6
 FRIENDS = 7
 
 def findstrong(string):
+    count = 0
     for word in STRONGKEYS:
-        if re.search(word,string):
-            return True
-    return False
+        result = re.findall(word,string)
+        count += len(result)
+    return count
 
 def findmedium(string):
+    count = 0
     for word in MEDIUMKEYS:
-        if re.search(word,string):
-            return True
-    return False
+        result = re.findall(word,string)
+        count += len(result)
+    return count
 
 def findweak(string):
+    count = 0
     for word in WEAKKEYS:
-        if re.search(word,string):
-            return True
-    return False
+        result = re.findall(word,string)
+        count += len(result)
+    return count
 
 def read_CSV(filename):
     table = []
@@ -62,18 +65,12 @@ def data_clean(table):
     data = []
     for line in range(len(table)):
         current_row = []
-        if findstrong(data[HANDLE]): current_row.append(1);
-        else: current_row.append(0)
-        if findmedium(data[HANDLE]): current_row.append(1);
-        else: current_row.append(0)
-        if findweak(data[HANDLE]): current_row.append(1);
-        else: current_row.append(0)
-        if findstrong(data[BIO]): current_row.append(1);
-        else: current_row.append(0)
-        if findmedium(data[BIO]): current_row.append(1);
-        else: current_row.append(0)
-        if findweak(data[BIO]): current_row.append(1);
-        else: current_row.append(0)
+        current_row.append(findstrong(line[HANDLE]))
+        current_row.append(findmedium(line[HANDLE]))
+        current_row.append(findweak(line[HANDLE]))
+        current_row.append(findstrong(line[BIO]))
+        current_row.append(findmedium(line[BIO]))
+        current_row.append(findweak(line[BIO]))
         current_row.append(data[FOLLOWER_COUNT])
         current_row.append(data[FRIEND_COUNT])
         current_row.append(data[INVESTOR])
