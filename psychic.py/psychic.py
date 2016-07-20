@@ -6,9 +6,9 @@ import sklearn
 #Keyword categories
 STRONGKEYS = ["Financ", "financ", "alpha", "Alpha", "trader", "Trader", "trading", "Trading", "stock", "Stock", "equity",
               "Equity", "Advis", "advis", "RIA", "Hedge", "hedge","Fund", "fund", "Wealth", "wealth", "AIM", "Portfolio",
-              "portfolio", "CFP", "CPF", "Index", "index"]
-MEDIUMKEYS = ["Asset", "asset", "Trade", "trade", "market", "Market", "capital", "Capital", "OTC", "executive", "Executive", "CEO", "Analyst", "analyst", "invest", "Invest",]
-WEAKKEYS = ["Board", "board", "manage", "Manage", "Option", "option", "fintech", "Fintech", "retail", "Retail", "swing", "Swing", "chief", "Chief"]
+              "portfolio", "CFP", "Trade", "trade", "invest", "Invest", "Asset", "asset"]
+MEDIUMKEYS = ["capital", "Capital", "OTC", "executive", "Executive", "CEO", "Analyst", "analyst", "fintech", "Fintech"]
+WEAKKEYS = ["Board", "board", "manage", "Manage", "Option", "option", "retail", "Retail", "swing", "Swing", "chief", "Chief"]
 
 FILENAME = "BLAHBLAHBLAH.csv"
 
@@ -53,10 +53,8 @@ def findweak(string):
 def read_CSV(filename):
     table = []
     with open("filename", 'rU') as csvfile:
-        reader = csv.reader(csvfile,dialect=csv.excel_tab)
-        for line in reader:
-            example = line[0].split(",")
-            table.append(example)
+        for line in csv.reader(csvfile,dialect=csv.excel_tab, quotechar='"', delimiter=',',quoting=csv.QUOTE_ALL, skipinitialspace=True):
+            table.append(line)
     return table
 
 def data_clean(table):

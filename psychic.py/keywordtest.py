@@ -8,11 +8,11 @@ STRONGKEYS = ["Financ", "financ", "alpha", "Alpha", "trader", "Trader", "trading
               "Equity", "Advis", "advis", "RIA", "Hedge", "hedge","Fund", "fund", "Wealth", "wealth", "AIM", "Portfolio",
               "portfolio", "CFP", "CPF", "Index", "index"]
 MEDIUMKEYS = ["Asset", "asset", "Trade", "trade", "market", "Market", "capital", "Capital", "OTC", "executive", "Executive", "CEO", "Analyst", "analyst", "invest", "Invest",]
-WEAKKEYS = ["Board", "board", "manage", "Manage", "Option", "option", "fintech", "Fintech", "retail", "Retail", "swing", "Swing", "chief", "Chief"]
+WEAKKEYS = ["Board", "board", "manage", "Manage", "Option", "option", "fintech", "Fintech", "retail", "Retail", "swing", "Swing", "chief", "Chief", "money"]
 
 ALLKEYS = STRONGKEYS + MEDIUMKEYS + WEAKKEYS
 
-FILE = "EMPTY STRING"
+FILE = "ok.csv"
 
 KEYCOUNTSBIO = dict()
 KEYCOUNTSHANDLE = dict()
@@ -31,27 +31,32 @@ def initial():
 
 def read_CSV(filename):
     table = []
-    with open("filename", 'rU') as csvfile:
+    with open(filename, 'rU') as csvfile:
         reader = csv.reader(csvfile,dialect=csv.excel_tab)
+        l = 0
         for line in reader:
-            example = line[0].split(",")
-            table.append(example)
+            str = ""
+            for element in line:
+                str += element
+                table.append(str)
+
     return table
 
 def output_lists(filename):
     table = read_CSV(filename)
-    table.reverse(); table.pop(); table.reverse()
     biolist = []; handlelist = []
     for line in table:
-        biolist.append(line[EXCEL_BIO_INDEX])
-        handlelist.append(line[EXCEL_HANDLE_INDEX])
+        biolist.append(line)
+        handlelist.append(line)
     return biolist, handlelist
 
 BIOLIST = []
 HANDLELIST = []
 
 def counter(dictionary, list):
-    for str in list:
+    for text in list:
+        str = text.replace("'","")
+        str = str.replace("\"","")
         text = str.lower()
         for key in dictionary.keys():
             if re.search(key, text):
@@ -59,7 +64,7 @@ def counter(dictionary, list):
     return dictionary
 
 if __name__ == '__main__':
-    biolist, handlelist = reader("CSVNAME GOES HERE")
+    biolist, handlelist = output_lists(FILE)
     Bio_result = counter(initial(), biolist)
     Handle_result = counter(initial(), handlelist)
     print("\n\n\n\nThese are the Bio Results\n")
